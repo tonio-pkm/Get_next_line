@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: antgarci <antgarci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/02 16:22:00 by antgarci          #+#    #+#             */
-/*   Updated: 2026/07/07 21:27:19 by antgarci         ###   ########.fr       */
+/*   Updated: 2026/07/07 21:06:22 by antgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 char	*join_free(char *rest, char *buffer)
 {
@@ -45,7 +45,7 @@ char	*extract_line(char *rest, char *jump)
 	return (str);
 }
 
-char	*extract_rest(char *jump)
+char	*extract_rest(char *rest, char *jump)
 {
 	char	*str;
 	int		len;
@@ -86,20 +86,20 @@ int	read_until_n(char **rest, int fd)
 
 char	*get_next_line(int fd)
 {
-	static char	*rest;
+	static char	*rest[1024];
 	char		*line;
 
-	if (read_until_n(&rest, fd) == -1)
+	if (read_until_n(&rest[fd], fd) == -1)
 		return (NULL);
-	if (search_end(rest) == NULL && !rest)
+	if (search_end(rest[fd]) == NULL && !rest[fd])
 		return (NULL);
-	if (search_end(rest) == NULL && rest)
+	if (search_end(rest[fd]) == NULL && rest[fd])
 	{
-		line = rest;
-		rest = NULL;
+		line = rest[fd];
+		rest[fd] = NULL;
 		return (line);
 	}
-	line = extract_line(rest, search_end(rest));
-	rest = extract_rest(search_end(rest));
+	line = extract_line(rest[fd], search_end(rest[fd]));
+	rest[fd] = extract_rest(rest[fd], search_end(rest[fd]));
 	return (line);
 }

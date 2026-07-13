@@ -6,7 +6,7 @@
 /*   By: antgarci <antgarci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/02 16:22:00 by antgarci          #+#    #+#             */
-/*   Updated: 2026/07/07 21:06:22 by antgarci         ###   ########.fr       */
+/*   Updated: 2026/07/09 16:09:57 by antgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ char	*extract_line(char *rest, char *jump)
 	return (str);
 }
 
-char	*extract_rest(char *rest, char *jump)
+char	*extract_rest(char *jump)
 {
 	char	*str;
 	int		len;
@@ -88,10 +88,11 @@ char	*get_next_line(int fd)
 {
 	static char	*rest[1024];
 	char		*line;
+	char		*aux;
 
 	if (read_until_n(&rest[fd], fd) == -1)
 		return (NULL);
-	if (search_end(rest[fd]) == NULL && !rest[fd])
+	if (search_end(rest[fd]) == NULL && (!rest[fd] || rest[fd][0] == '\0'))
 		return (NULL);
 	if (search_end(rest[fd]) == NULL && rest[fd])
 	{
@@ -99,7 +100,9 @@ char	*get_next_line(int fd)
 		rest[fd] = NULL;
 		return (line);
 	}
+	aux = rest[fd];
 	line = extract_line(rest[fd], search_end(rest[fd]));
-	rest[fd] = extract_rest(rest[fd], search_end(rest[fd]));
+	rest[fd] = extract_rest(search_end(rest[fd]));
+	free(aux);
 	return (line);
 }

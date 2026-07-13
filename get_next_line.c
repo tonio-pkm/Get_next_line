@@ -6,7 +6,7 @@
 /*   By: antgarci <antgarci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/02 16:22:00 by antgarci          #+#    #+#             */
-/*   Updated: 2026/07/07 21:27:19 by antgarci         ###   ########.fr       */
+/*   Updated: 2026/07/13 13:45:26 by antgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,18 +88,25 @@ char	*get_next_line(int fd)
 {
 	static char	*rest;
 	char		*line;
+	char		*aux;
 
 	if (read_until_n(&rest, fd) == -1)
 		return (NULL);
-	if (search_end(rest) == NULL && !rest)
+	if (search_end(rest) == NULL && (!rest || rest[0] == '\0'))
+	{
+		free(rest);
+		rest = NULL;
 		return (NULL);
+	}
 	if (search_end(rest) == NULL && rest)
 	{
 		line = rest;
 		rest = NULL;
 		return (line);
 	}
+	aux = rest;
 	line = extract_line(rest, search_end(rest));
 	rest = extract_rest(search_end(rest));
+	free(aux);
 	return (line);
 }

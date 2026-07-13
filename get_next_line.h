@@ -6,13 +6,16 @@
 /*   By: antgarci <antgarci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/02 16:31:03 by antgarci          #+#    #+#             */
-/*   Updated: 2026/07/07 21:27:32 by antgarci         ###   ########.fr       */
+/*   Updated: 2026/07/09 16:14:50 by antgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
-# define BUFFER_SIZE 1024
+
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 1024
+# endif
 
 # include <stdio.h>
 # include <unistd.h>
